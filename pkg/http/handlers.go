@@ -1,20 +1,19 @@
-package main
+package http
 
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+
+	"github.com/c-sinclair/restic/pkg/core"
 )
 
-type Article struct {
-	Title   string `json:"title"`
-	Desc    string `json:"description"`
-	Content string `json:"content"`
+type Service struct {
+	repo   core.Repository
+	Router http.Handler
 }
-type Articles []Article
 
 func allArticles(w http.ResponseWriter, r *http.Request) {
 	articles := Articles{
@@ -33,15 +32,17 @@ func homePage(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Homepage Endpoint hit")
 }
 
-func handleRequest() {
+func New(repo core.Repository) Service {
+	service := Service{
+		repo: repo,
+	}
+
 	router := mux.NewRouter().StrictSlash(true)
 
 	router.HandleFunc("/", homePage)
 	router.HandleFunc("/articles", allArticles).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":8081", router))
-}
+	service.Router = UseMiddleware(router)
 
-func main() {
-	handleRequest()
+	return service
 }
