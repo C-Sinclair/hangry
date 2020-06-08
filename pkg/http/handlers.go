@@ -16,8 +16,8 @@ type Service struct {
 }
 
 func allArticles(w http.ResponseWriter, r *http.Request) {
-	articles := Articles{
-		Article{
+	articles := core.Articles{
+		core.Article{
 			Title:   "A great test title",
 			Desc:    "Test description",
 			Content: "Hello World",

@@ -1,0 +1,30 @@
+type User {
+    id: ID!
+    username: String!
+    email: String!
+
+    recipes: [Recipe!]!
+    inventory: [Food!]!
+}
+
+type Food {
+    id: ID!
+    name: String!
+}
+
+type Ingredient {
+    id: ID!
+    food: Food!
+    quantity: String!
+    note: String
+}
+
+type Recipe {
+    id: ID!
+    name: String!
+    ingredient: [Ingredient!]!
+}
+
+type Query {
+    recipes: [Recipe!]!
+}
